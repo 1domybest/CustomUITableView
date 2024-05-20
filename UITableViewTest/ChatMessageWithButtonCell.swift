@@ -172,8 +172,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
         errorBackgroundView.layer.cornerRadius = 8
         
         errorBackgroundView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-
-        
         
         errorBackgroundView.layer.addSublayer(lineLayer)
         

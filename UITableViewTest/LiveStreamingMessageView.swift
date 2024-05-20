@@ -29,12 +29,13 @@ struct LiveStreamingMessageView: UIViewRepresentable {
     func updateUIView(_ uiView: UITableView, context: Context) {
         // Update the view when needed
         print("ui 업데이트")
-        context.coordinator.updateData(data)
-        uiView.reloadData()
-        
+
         DispatchQueue.main.async {
+            context.coordinator.updateData(data)
+            uiView.reloadData()
+            
             let indexPath = IndexPath(row: data.count - 1, section: 0)
-            uiView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            uiView.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
     }
     

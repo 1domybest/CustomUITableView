@@ -71,11 +71,11 @@
 				D1EFD0682BF5FC97008DE166 /* Assets.xcassets */,
 				D1EFD06A2BF5FC97008DE166 /* Preview Content */,
 				D1EFD0722BF5FD02008DE166 /* LiveStreamingMessageView.swift */,
-				D1EFD0802BF6ECDE008DE166 /* MessageRenderingProtocol.swift */,
 				D1EFD0842BF6FC64008DE166 /* ChatMessageCell.swift */,
+				D1EFD0802BF6ECDE008DE166 /* MessageRenderingProtocol.swift */,
+				D17F59562BFB107A001AFF16 /* ChatMessageWithButtonCell.swift */,
 				D14C481A2BF7425300AF7BEA /* String.swift */,
 				D110B1BE2BF769DE0019017D /* Storyboard.storyboard */,
-				D17F59562BFB107A001AFF16 /* ChatMessageWithButtonCell.swift */,
 			);
 			path = UITableViewTest;
 			sourceTree = "<group>";

@@ -36,10 +36,10 @@ class ChatMessageWithButtonCell: UITableViewCell {
           return button
       }()
     
-    var indexPath: IndexPath?
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        contentView.addSubview(circleButton) // 버튼을 contentView에 추가
         
         bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -49,9 +49,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
         
         addSubview(messageLabel)
         
-        addSubview(circleButton) // 버튼 추가
-        circleButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        print("???")
         messageLabel.attributedText = message
         messageLabel.numberOfLines = 0
         
@@ -69,11 +66,12 @@ class ChatMessageWithButtonCell: UITableViewCell {
             messageLabel.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant:  textHorizantalPadding),
             messageLabel.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: textVerticalPadding),
             messageLabel.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: textHorizantalPadding),
-   
+
             
         ]
         NSLayoutConstraint.activate(constraints)
         
+        contentView.isUserInteractionEnabled = true
         
     }
     
@@ -121,7 +119,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
     
     
     private func layoutButton() {
-        circleButton.tag = indexPath?.row ?? 0
         let bubbleWidth = bubbleBackgroundView.frame.width
         let bubbleHeight = bubbleBackgroundView.frame.height
         
@@ -131,9 +128,5 @@ class ChatMessageWithButtonCell: UITableViewCell {
          
          
      }
-    
-    @objc func buttonTapped() {
-          print("Button tapped in cell")
-          // Handle button tap action here
-      }
+
 }

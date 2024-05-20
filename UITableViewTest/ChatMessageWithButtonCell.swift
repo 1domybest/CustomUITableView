@@ -49,9 +49,10 @@ class ChatMessageWithButtonCell: UITableViewCell {
         
         addSubview(messageLabel)
         
-        addSubview(circleButton) // 버튼 추가
+        contentView.addSubview(circleButton)
+        
         circleButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        print("???")
+        
         messageLabel.attributedText = message
         messageLabel.numberOfLines = 0
         
@@ -69,12 +70,12 @@ class ChatMessageWithButtonCell: UITableViewCell {
             messageLabel.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant:  textHorizantalPadding),
             messageLabel.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: textVerticalPadding),
             messageLabel.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: textHorizantalPadding),
-   
             
         ]
+        
         NSLayoutConstraint.activate(constraints)
         
-        
+        contentView.isUserInteractionEnabled = true
     }
     
     required init?(coder: NSCoder) {

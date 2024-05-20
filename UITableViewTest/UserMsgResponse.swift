@@ -9,6 +9,22 @@ import Foundation
 import SwiftUI
 
 struct UserMsgResponse: Decodable, MessageRenderingProtocol {
+    func getSocketResponseEvent() -> SocketResponseEvent {
+        return .userMsg
+    }
+    
+    func getMessageType() -> MessageType {
+        return .normal
+    }
+    
+    func getMessageStatus() -> MessageStatus {
+        return .success
+    }
+    
+    mutating func setMessageStatus(messageStatus: MessageStatus) {
+        
+    }
+    
     
     func getTarActivityName() -> String? {
         return nil

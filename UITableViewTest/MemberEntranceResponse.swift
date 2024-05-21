@@ -1,31 +1,14 @@
 //
-//  RequestUserMsg.swift
+//  MemberEntrance.swift
 //  HypyG
 //
-//  Created by 온석태 on 12/19/23.
+//  Created by 온석태 on 2/29/24.
 //
 
 import Foundation
 import SwiftUI
 
-struct UserMsgResponse: Decodable, MessageRenderingProtocol {
-    var messageStatus: MessageStatus = .waiting
-    func getSocketResponseEvent() -> SocketResponseEvent {
-        return .userMsg
-    }
-    
-    func getMessageType() -> MessageType {
-        return .normal
-    }
-    
-    func getMessageStatus() -> MessageStatus {
-        return messageStatus
-    }
-    
-    mutating func setMessageStatus(messageStatus: MessageStatus) {
-        self.messageStatus = messageStatus
-    }
-    
+struct MemberEntraceResponse: Decodable, MessageRenderingProtocol {
     
     func getTarActivityName() -> String? {
         return nil
@@ -36,7 +19,15 @@ struct UserMsgResponse: Decodable, MessageRenderingProtocol {
     }
     
     func getUserPid() -> String? {
-        return userPid
+        return nil
+    }
+    
+    func getActivityName() -> String? {
+        return nil
+    }
+    
+    func getProfileImgUrl() -> String? {
+        return nil
     }
     
     func getTarUserType() -> String? {
@@ -47,20 +38,20 @@ struct UserMsgResponse: Decodable, MessageRenderingProtocol {
         self.message = message
     }
     
+    func getMessageId() -> String? {
+        return nil
+    }
+    
+    
+    let socketResponseEvent: SocketResponseEvent = .memberEntrance
+    let messageType: MessageType = .welcom
+    
     private enum CodingKeys: String, CodingKey {
-         case messageId, userId, userType, message, messageChanged, userPid , userName, userProfileImgUrl
+         case message, userId
      }
     
-    var message: String
-    var messageId: String
     var userId: Int
-    var userType: String
-    var messageChanged: Bool
-    
-    var userPid: String
-    var userName: String = ""
-    var userProfileImgUrl: String
-    
+    var message: String
     
     var finalMessage: String {
         get {
@@ -71,11 +62,9 @@ struct UserMsgResponse: Decodable, MessageRenderingProtocol {
         }
     }
     
-    var index:Int?
+    var messageStatus: MessageStatus = .waiting
     
-    func getMessageId() -> String? {
-        return messageId
-    }
+    var index:Int?
     
     func getIndex() -> Int? {
         if index == nil {
@@ -85,20 +74,28 @@ struct UserMsgResponse: Decodable, MessageRenderingProtocol {
         }
     }
     
-    func getActivityName() -> String? {
-        return userName
+    func getMessageStatus() -> MessageStatus {
+        return self.messageStatus
     }
     
-    func getProfileImgUrl() -> String? {
-        return userProfileImgUrl
+    mutating func setMessageStatus(messageStatus: MessageStatus) {
+        self.messageStatus = messageStatus
+    }
+    
+    func getSocketResponseEvent() -> SocketResponseEvent {
+        return self.socketResponseEvent
+    }
+    
+    func getMessageType() -> MessageType {
+        self.messageType
     }
     
     func getUserId() -> Int? {
-        return self.userId
+        return userId
     }
     
     func getUserType() -> String? {
-        return userType
+        return nil
     }
     
     func getMessage() -> String? {

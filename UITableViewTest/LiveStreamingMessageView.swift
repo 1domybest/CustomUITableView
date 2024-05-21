@@ -29,14 +29,13 @@ struct LiveStreamingMessageView: UIViewRepresentable {
     func updateUIView(_ uiView: UITableView, context: Context) {
         // Update the view when needed
         print("ui 업데이트")
+        
+        context.coordinator.updateData(data)
+        uiView.reloadData()
 
-        DispatchQueue.main.async {
-            context.coordinator.updateData(data)
-            uiView.reloadData()
-            
-            let indexPath = IndexPath(row: data.count - 1, section: 0)
-            uiView.scrollToRow(at: indexPath, at: .bottom, animated: false)
-        }
+        let indexPath = IndexPath(row: data.count - 1, section: 0)
+        uiView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        
     }
     
     func makeCoordinator() -> Coordinator {
@@ -52,6 +51,9 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         let messageVerticalPadding:CGFloat = 10
         let textHorizantalPadding:CGFloat = 12
         let textVerticalPadding:CGFloat = 6
+        
+        let circleSize:CGFloat = 32 // 특수버튼 크기
+        let circleHorizantalPadding:CGFloat = 10 // 버튼 가로 패딩
         
         init(data: [MessageRenderingProtocol]) {
             self.data = data
@@ -74,15 +76,30 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             
+            let messageRenderingProtocol = data[indexPath.row]
+            
+            let isButtonMessage:Bool = checkButtonMessage(messageRenderingProtocol: messageRenderingProtocol)
+            let isErrorMessage:Bool = checkErrorMessage(messageRenderingProtocol: messageRenderingProtocol)
+            
             let messageWidth = data[indexPath.row].getMessage()?.widthOfString(usingFont: UIFont.systemFont(ofSize: 14.0)) ?? .zero
             let messageHeight = data[indexPath.row].getMessage()?.heightOfString(usingFont: UIFont.systemFont(ofSize: 14.0)) ?? .zero
             
-            let maxWidth = UIScreen.main.bounds.width - (messageHorizantalPadding * 2) - (textHorizantalPadding * 2)
+            var maxWidth = UIScreen.main.bounds.width - (messageHorizantalPadding * 2) - (textHorizantalPadding * 2)
+            
+            // 버튼이 있을시
+            if isButtonMessage {
+                maxWidth -= (circleSize + circleHorizantalPadding * 2)
+            }
+            
             let maxHeight = ceil(messageWidth/maxWidth) * messageHeight
+            
+            
             
             var errorHeight:CGFloat = .zero
             // errorBackgroundView의 크기 조정
-            errorHeight = messageHeight + textVerticalPadding * 2
+            if isErrorMessage {
+                errorHeight = messageHeight + textVerticalPadding * 2
+            }
             
             return maxHeight + (messageVerticalPadding * 2) + (textVerticalPadding * 2) + (errorHeight)
         }
@@ -93,16 +110,16 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            
+            let messageRenderingProtocol = data[indexPath.row]
             // 공통
             // 재사용
             let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! ChatMessageWithButtonCell
-
+            cell.messageRenderingProtocol = messageRenderingProtocol
             // 테이블 클릭시 UI 변경 막기
             cell.selectedBackgroundView = UIView()
             
             // 메시지
-            let message = data[indexPath.row].getMessage() ?? ""
+            let message = messageRenderingProtocol.getMessage() ?? ""
             
             // 폰트
             let font = UIFont.systemFont(ofSize: 14.0)
@@ -114,6 +131,8 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             // 어떤 인덱스인지 알수있도록 등록
             cell.circleButton.tag = indexPath.row
             
+            
+            //  에러일시 ------ [기본메시지일때만]
             cell.errorDeleteButton.addTarget(self, action: #selector(deleteTapped(_:)), for: .touchUpInside)
             // 어떤 인덱스인지 알수있도록 등록
             cell.errorDeleteButton.tag = indexPath.row
@@ -152,7 +171,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             return attributedString
         }
         
-        func messageHandler (messageRenderingProtocol: MessageRenderingProtocol) {
+        func messageHandler (messageRenderingProtocol: MessageRenderingProtocol, cell: ChatMessageWithButtonCell) {
             switch messageRenderingProtocol.getMessageType() {
             case .normal :
                 if messageRenderingProtocol.getMessageStatus() == .deleted {
@@ -177,6 +196,22 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             case .none :
                 return
             }
+        }
+        
+        func checkButtonMessage(messageRenderingProtocol: MessageRenderingProtocol) -> Bool {
+            var result = false
+            if messageRenderingProtocol.getSocketResponseEvent() == .memberEntrance {
+                result = true
+            }
+            return true
+        }
+        
+        func checkErrorMessage(messageRenderingProtocol: MessageRenderingProtocol) -> Bool {
+            var result = false
+            if messageRenderingProtocol.getMessageStatus() == .failure {
+                result = true
+            }
+            return true
         }
         
         @objc func buttonTapped(_ sender: UIButton) {

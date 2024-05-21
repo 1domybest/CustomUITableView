@@ -40,7 +40,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
     var textColor: UIColor = .white
     var startBackgroundColor: UIColor = .black.withAlphaComponent(0.5)
     var endBackgroundColor: UIColor = .black.withAlphaComponent(0.5)
-    var circleButtonImage: UIImage = UIImage(resource: .iconXmark)
         
     var isButtonMessage:Bool = false
     var isErrorMessage:Bool = false
@@ -48,12 +47,14 @@ class ChatMessageWithButtonCell: UITableViewCell {
     let circleButton: UIButton = {
           let button = UIButton()
           button.translatesAutoresizingMaskIntoConstraints = false
-          button.backgroundColor = .blue // 버튼의 배경색 설정
+          button.backgroundColor = .black.withAlphaComponent(0.5) // 버튼의 배경색 설정
           button.layer.cornerRadius = 16 // 버튼을 원형으로 만들기 위해 적절한 값을 지정합니다.
           button.widthAnchor.constraint(equalToConstant: 32).isActive = true // 너비 설정
           button.heightAnchor.constraint(equalToConstant: 32).isActive = true // 높이 설정
           return button
       }()
+    
+    var circleButtonImage: UIImage?
     
 
     let errorDeleteButton: UIButton = {
@@ -131,6 +132,12 @@ class ChatMessageWithButtonCell: UITableViewCell {
         }
         
         if isButtonMessage {
+            if circleButtonImage != nil {
+                circleButton.setImage(circleButtonImage, for: .normal)
+            }
+            
+            circleButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+
             contentView.addSubview(circleButton)
             circleButton.translatesAutoresizingMaskIntoConstraints = false
             let constraints = [
@@ -145,6 +152,8 @@ class ChatMessageWithButtonCell: UITableViewCell {
         
         errorResendButton.setImage(UIImage(resource: .iconReset), for: .normal)
         errorDeleteButton.setImage(UIImage(resource: .iconXmark), for: .normal)
+        
+        
         
         messageLabel.attributedText = message
         messageLabel.numberOfLines = 0

@@ -95,8 +95,6 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             
             let maxHeight = ceil(messageWidth/maxWidth) * messageHeight
             
-            
-            
             var errorHeight:CGFloat = .zero
             // errorBackgroundView의 크기 조정
             if isErrorMessage {
@@ -121,20 +119,18 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             // 재사용
             let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! ChatMessageWithButtonCell
             self.cellHandler(messageRenderingProtocol: messageRenderingProtocol, cell: cell)
-            
-            cell.setup(messageRenderingProtocol: messageRenderingProtocol, isButtonMessage: isButtonMessage, isErrorMessage: isErrorMessage)
+
             // 테이블 클릭시 UI 변경 막기
             cell.selectedBackgroundView = UIView()
-            
             
             // 버튼 메시지용 ------
             // 버튼이 있는 메시지일시 버튼 등록
             if isButtonMessage {
+                cell.circleButtonImage = UIImage(resource: .iconButton2)
                 cell.circleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
                 // 어떤 인덱스인지 알수있도록 등록
                 cell.circleButton.tag = indexPath.row
             }
-            
 
             //  에러일시 ------ [기본메시지일때만]
             if isErrorMessage {
@@ -146,6 +142,8 @@ struct LiveStreamingMessageView: UIViewRepresentable {
                 // 어떤 인덱스인지 알수있도록 등록
                 cell.errorResendButton.tag = indexPath.row
             }
+            
+            cell.setup(messageRenderingProtocol: messageRenderingProtocol, isButtonMessage: isButtonMessage, isErrorMessage: isErrorMessage)
             
             // 메시지
             let message = messageRenderingProtocol.getMessage() ?? ""

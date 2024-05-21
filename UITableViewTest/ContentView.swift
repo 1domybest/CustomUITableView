@@ -49,8 +49,11 @@ class ContentViewModel: ObservableObject {
 //            let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
 //            
 //            self.messageList.append(messageRenderingProtocol)
-            
-            if i % 3 == 0 {
+            if i % 5 == 0 {
+                let preMessage = MemberEntraceResponse(userId: 1, message: "사용자 이름님이 입장하셨습니다")
+                var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
+                self.messageList.append(messageRenderingProtocol)
+            } else if i % 3 == 0 {
                 let preMessage = MemberEntraceResponse(userId: 1, message: "사용자 이름님이 입장하셨습니다")
                 var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
                 self.messageList.append(messageRenderingProtocol)
@@ -77,7 +80,7 @@ class ContentViewModel: ObservableObject {
     
     
     func appendMeesage () {
-        let preMessage = UserMsgResponse(message: "\(self.messageList.count) 번째 메시지", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(self.messageList.count)", userProfileImgUrl: "" )
+        let preMessage = UserMsgResponse(message: "새로운 인간 \(self.messageList.count) 번째 메시지", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "새로운 인간", userProfileImgUrl: "" )
         
         var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
         messageRenderingProtocol.setMessageStatus(messageStatus: .success)

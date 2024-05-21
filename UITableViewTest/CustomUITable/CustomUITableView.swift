@@ -10,8 +10,14 @@ import SwiftUI
 import UIKit
 
 // UIViewRepresentable 프로토콜을 준수하는 사용자 정의 SwiftUI 뷰
+
 struct CustomUITableView: UIViewRepresentable {
     var data: [MessageRenderingProtocol]
+    
+    let onClickDelete: (_ index: Int) -> Void
+    let onClickResend: (_ index: Int) -> Void
+    let onClickReaction: (_ index: Int) -> Void
+    
     
     func makeUIView(context: Context) -> UITableView {
         print("ui 생성됨")
@@ -34,6 +40,9 @@ struct CustomUITableView: UIViewRepresentable {
 
         let indexPath = IndexPath(row: data.count - 1, section: 0)
         uiView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+    }
+    
+    func updateRow(index: Int) {
         
     }
     
@@ -249,7 +258,13 @@ struct CustomUITableView: UIViewRepresentable {
             }
             
             if let tableView = view as? UITableView {
-                tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
+                tableView.performBatchUpdates({
+                    tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
+                }, completion: { _ in
+                    print("버튼 클릭 성공")
+                    // 부모로 콜백 호출
+                    self.parent.onClickReaction(row)
+                })
             }
         }
         
@@ -284,7 +299,13 @@ struct CustomUITableView: UIViewRepresentable {
                 tableView.performBatchUpdates({
                     tableView.deleteRows(at: [indexPath], with: .none)
                 }, completion: { _ in
-                    tableView.reloadData()
+                    tableView.performBatchUpdates({
+                        tableView.reloadData()
+                    }, completion: { _ in
+                        print("버튼 삭제 성공")
+                        // 부모로 콜백 호출
+                        self.parent.onClickDelete(row)
+                    })
                 })
                 
             }
@@ -293,6 +314,7 @@ struct CustomUITableView: UIViewRepresentable {
         @objc func resendTapped(_ sender: UIButton) {
             let row = sender.tag
             print("Button resendTapped in cell \(row) tapped")
+            self.data[row].setMessageStatus(messageStatus: .waiting)
             
             var view: UIView? = sender
             while view != nil && !(view is UITableView) {
@@ -300,8 +322,15 @@ struct CustomUITableView: UIViewRepresentable {
             }
             
             if let tableView = view as? UITableView {
-                tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
+                tableView.performBatchUpdates({
+                    tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
+                }, completion: { _ in
+                    print("재전송 클릭 성공")
+                    // 부모로 콜백 호출
+                    self.parent.onClickResend(row)
+                })
             }
         }
     }
+    //
 }

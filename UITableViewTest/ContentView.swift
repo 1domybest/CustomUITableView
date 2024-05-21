@@ -28,8 +28,22 @@ struct ContentView: View {
             
             Spacer().frame(height: 50)
             
-            CustomUITableView(data: vm.messageList)
-                .frame(height: 300)
+            NewCustomTableViewRepresentable(view: vm.newCustomTableView)
+                .frame(height: UIScreen.main.bounds.height/3)
+            
+//            CustomUITableView(
+//                data: vm.messageList,
+//                onClickDelete: { index in
+//                    print("onClickDelete callback index = \(index)")
+//                }, onClickResend: { index in
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                        self.vm.messageList[index].setMessageStatus(messageStatus: .failure)
+//                        print("onClickResend callback index = \(index)")
+//                    }
+//                }, onClickReaction: { index in
+//                    print("onClickReaction callback index = \(index)")
+//                })
+//                .frame(height: 300)
             
             Spacer()
         }
@@ -38,17 +52,12 @@ struct ContentView: View {
 }
 
 class ContentViewModel: ObservableObject {
-    @Published var messageList: [any MessageRenderingProtocol] = [] // 메시지 리스트
-    
+    var messageList: [any MessageRenderingProtocol] = [] // 메시지 리스트
+    var newCustomTableView:NewCustomTableView?
     
     init() {
         let mg = "아무거나 막적음. ㅁㄴㅇㅁㅁㄴㅇㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴ ㅇㅁㄴㅇㅁㄴㅇㅁㄴ"
         for i in 0...1000 {
-//            let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 메시지 \(i % 2 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
-//            
-//            let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
-//            
-//            self.messageList.append(messageRenderingProtocol)
             if i % 5 == 0 {
                 let preMessage = MemberEntraceResponse(userId: 1, message: "사용자 이름님이 입장하셨습니다")
                 var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
@@ -75,7 +84,30 @@ class ContentViewModel: ObservableObject {
             }
            
         }
+       
+        self.newCustomTableView = NewCustomTableView(
+                data: self.messageList,
+                onClickDelete: onClickDelete,
+                onClickResend: onClickResend,
+                onClickReaction: onClickReaction
+            )
         
+    }
+    
+    func onClickDelete (index: Int) {
+        print("onClickDelete callback index = \(index)")
+    }
+    
+    func onClickResend (index: Int) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.messageList[index].setMessageStatus(messageStatus: .failure)
+            print("onClickResend callback index = \(index)")
+            self.newCustomTableView?.updateRow(self.messageList[index], index: index)
+        }
+    }
+    
+    func onClickReaction (index: Int) {
+        print("onClickReaction callback index = \(index)")
     }
     
     
@@ -86,5 +118,10 @@ class ContentViewModel: ObservableObject {
         messageRenderingProtocol.setMessageStatus(messageStatus: .success)
         
         self.messageList.append(messageRenderingProtocol)
+        
+        self.newCustomTableView?.appendData(messageRenderingProtocol)
+        self.newCustomTableView?.scrollToBottom()
+        
+        
     }
 }

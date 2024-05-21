@@ -11,6 +11,7 @@
 		D14C481B2BF7425300AF7BEA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14C481A2BF7425300AF7BEA /* String.swift */; };
 		D17F59572BFB107A001AFF16 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17F59562BFB107A001AFF16 /* ChatMessageCell.swift */; };
 		D17F59912BFC452C001AFF16 /* MemberEntranceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17F59902BFC452C001AFF16 /* MemberEntranceResponse.swift */; };
+		D17F59942BFCA8E5001AFF16 /* NewCustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17F59932BFCA8E5001AFF16 /* NewCustomTableView.swift */; };
 		D1EFD0652BF5FC96008DE166 /* UITableViewTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0642BF5FC96008DE166 /* UITableViewTestApp.swift */; };
 		D1EFD0672BF5FC96008DE166 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0662BF5FC96008DE166 /* ContentView.swift */; };
 		D1EFD0692BF5FC97008DE166 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1EFD0682BF5FC97008DE166 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 		D14C481A2BF7425300AF7BEA /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D17F59562BFB107A001AFF16 /* ChatMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
 		D17F59902BFC452C001AFF16 /* MemberEntranceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberEntranceResponse.swift; sourceTree = "<group>"; };
+		D17F59932BFCA8E5001AFF16 /* NewCustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCustomTableView.swift; sourceTree = "<group>"; };
 		D1EFD0612BF5FC96008DE166 /* UITableViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UITableViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1EFD0642BF5FC96008DE166 /* UITableViewTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewTestApp.swift; sourceTree = "<group>"; };
 		D1EFD0662BF5FC96008DE166 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			children = (
 				D1EFD0722BF5FD02008DE166 /* CustomUITableView.swift */,
 				D17F59562BFB107A001AFF16 /* ChatMessageCell.swift */,
+				D17F59932BFCA8E5001AFF16 /* NewCustomTableView.swift */,
 			);
 			path = CustomUITable;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 				D1EFD0732BF5FD02008DE166 /* CustomUITableView.swift in Sources */,
 				D1EFD0852BF6FC64008DE166 /* TempChatMessageCell.swift in Sources */,
 				D14C481B2BF7425300AF7BEA /* String.swift in Sources */,
+				D17F59942BFCA8E5001AFF16 /* NewCustomTableView.swift in Sources */,
 				D1EFD0812BF6ECDE008DE166 /* MessageRenderingProtocol.swift in Sources */,
 				D1EFD0652BF5FC96008DE166 /* UITableViewTestApp.swift in Sources */,
 				D17F59912BFC452C001AFF16 /* MemberEntranceResponse.swift in Sources */,

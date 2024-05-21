@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ChatMessageCell: UITableViewCell {
+class TempChatMessageCell: UITableViewCell {
     var message: NSAttributedString? // 메시지 속성 변경
     
     let messageLabel = UILabel()

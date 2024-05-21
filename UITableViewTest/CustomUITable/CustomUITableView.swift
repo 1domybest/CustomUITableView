@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 
 // UIViewRepresentable 프로토콜을 준수하는 사용자 정의 SwiftUI 뷰
-struct LiveStreamingMessageView: UIViewRepresentable {
+struct CustomUITableView: UIViewRepresentable {
     var data: [MessageRenderingProtocol]
     
     func makeUIView(context: Context) -> UITableView {
@@ -19,7 +19,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         
         tableView.dataSource = context.coordinator
         tableView.delegate = context.coordinator // Coordinator를 delegate로 설정
-        tableView.register(ChatMessageWithButtonCell.self, forCellReuseIdentifier: "id")
+        tableView.register(ChatMessageCell.self, forCellReuseIdentifier: "id")
         tableView.separatorStyle = .none
         
         return tableView
@@ -46,7 +46,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         
         var data: [MessageRenderingProtocol]
         
-        var parent: LiveStreamingMessageView
+        var parent: CustomUITableView
         
         let messageHorizantalPadding:CGFloat = 10
         let messageVerticalPadding:CGFloat = 10
@@ -58,7 +58,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         
         let font:UIFont = UIFont.systemFont(ofSize: 14.0) // 버튼 가로 패딩
         
-        init(data: [MessageRenderingProtocol], parent: LiveStreamingMessageView) {
+        init(data: [MessageRenderingProtocol], parent: CustomUITableView) {
             self.data = data
             self.parent = parent
         }
@@ -119,7 +119,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             let isButtonMessage:Bool = checkButtonMessage(messageRenderingProtocol: messageRenderingProtocol)
             let isErrorMessage:Bool = checkErrorMessage(messageRenderingProtocol: messageRenderingProtocol)
             // 재사용
-            let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! ChatMessageWithButtonCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! ChatMessageCell
             self.cellHandler(messageRenderingProtocol: messageRenderingProtocol, cell: cell)
 
             // 테이블 클릭시 UI 변경 막기
@@ -179,7 +179,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             return attributedString
         }
         
-        func cellHandler (messageRenderingProtocol: MessageRenderingProtocol, cell: ChatMessageWithButtonCell) {
+        func cellHandler (messageRenderingProtocol: MessageRenderingProtocol, cell: ChatMessageCell) {
             // 메시지
             let message = messageRenderingProtocol.getMessage() ?? ""
             cell.font = font
@@ -264,7 +264,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             }
             
             if let tableView = view as? UITableView {
-                guard let cell = sender.superview?.superview as? ChatMessageWithButtonCell else {
+                guard let cell = sender.superview?.superview as? ChatMessageCell else {
                      print("Unable to find the cell containing the button.")
                      return
                  }

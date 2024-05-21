@@ -28,7 +28,7 @@ struct ContentView: View {
             
             Spacer().frame(height: 50)
             
-            LiveStreamingMessageView(data: vm.messageList)
+            CustomUITableView(data: vm.messageList)
                 .frame(height: 300)
             
             Spacer()

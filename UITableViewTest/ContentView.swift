@@ -55,7 +55,7 @@ class ContentViewModel: ObservableObject {
                 var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
                 self.messageList.append(messageRenderingProtocol)
             } else if i % 2 == 0 {
-                let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 에러 메시지 임 \(i % 4 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
+                let preMessage = UserMsgResponse(message: "에러입니다 \(i) 번째 에러 메시지 임 \(i % 4 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "에러입니다", userProfileImgUrl: "" )
                 
                 var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
                 
@@ -64,7 +64,7 @@ class ContentViewModel: ObservableObject {
                 self.messageList.append(messageRenderingProtocol)
                 
             } else {
-                let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 메시지 \(i % 2 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
+                let preMessage = UserMsgResponse(message: "온석태 \(i) 번째 메시지 \(i % 2 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "온석태", userProfileImgUrl: "" )
                 
                 let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
                 

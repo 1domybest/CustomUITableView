@@ -55,6 +55,8 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         let circleSize:CGFloat = 32 // 특수버튼 크기
         let circleHorizantalPadding:CGFloat = 10 // 버튼 가로 패딩
         
+        let font:UIFont = UIFont.systemFont(ofSize: 14.0) // 버튼 가로 패딩
+        
         init(data: [MessageRenderingProtocol]) {
             self.data = data
         }
@@ -81,8 +83,8 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             let isButtonMessage:Bool = checkButtonMessage(messageRenderingProtocol: messageRenderingProtocol)
             let isErrorMessage:Bool = checkErrorMessage(messageRenderingProtocol: messageRenderingProtocol)
             
-            let messageWidth = data[indexPath.row].getMessage()?.widthOfString(usingFont: UIFont.systemFont(ofSize: 14.0)) ?? .zero
-            let messageHeight = data[indexPath.row].getMessage()?.heightOfString(usingFont: UIFont.systemFont(ofSize: 14.0)) ?? .zero
+            let messageWidth = messageRenderingProtocol.getMessage()?.widthOfString(usingFont: UIFont.systemFont(ofSize: 14.0)) ?? .zero
+            let messageHeight = messageRenderingProtocol.getMessage()?.heightOfString(usingFont: UIFont.systemFont(ofSize: 14.0)) ?? .zero
             
             var maxWidth = UIScreen.main.bounds.width - (messageHorizantalPadding * 2) - (textHorizantalPadding * 2)
             
@@ -101,6 +103,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
                 errorHeight = messageHeight + textVerticalPadding * 2
             }
             
+           
             return maxHeight + (messageVerticalPadding * 2) + (textVerticalPadding * 2) + (errorHeight)
         }
         
@@ -111,21 +114,17 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             // 공통
-            let messageRenderingProtocol = data[indexPath.row]
+            var messageRenderingProtocol = data[indexPath.row]
             
             let isButtonMessage:Bool = checkButtonMessage(messageRenderingProtocol: messageRenderingProtocol)
             let isErrorMessage:Bool = checkErrorMessage(messageRenderingProtocol: messageRenderingProtocol)
             // 재사용
             let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! ChatMessageWithButtonCell
+            self.cellHandler(messageRenderingProtocol: messageRenderingProtocol, cell: cell)
+            
             cell.setup(messageRenderingProtocol: messageRenderingProtocol, isButtonMessage: isButtonMessage, isErrorMessage: isErrorMessage)
             // 테이블 클릭시 UI 변경 막기
             cell.selectedBackgroundView = UIView()
-            
-            // 메시지
-            let message = messageRenderingProtocol.getMessage() ?? ""
-            
-            // 폰트
-            let font = UIFont.systemFont(ofSize: 14.0)
             
             
             // 버튼 메시지용 ------
@@ -136,8 +135,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
                 cell.circleButton.tag = indexPath.row
             }
             
-            
-            
+
             //  에러일시 ------ [기본메시지일때만]
             if isErrorMessage {
                 cell.errorDeleteButton.addTarget(self, action: #selector(deleteTapped(_:)), for: .touchUpInside)
@@ -149,18 +147,19 @@ struct LiveStreamingMessageView: UIViewRepresentable {
                 cell.errorResendButton.tag = indexPath.row
             }
             
+            // 메시지
+            let message = messageRenderingProtocol.getMessage() ?? ""
             
-            
-            let attributedString = boldingUserName(userName: "사용자이름", message: message, font: font, index: indexPath.row)
-            
+            let attributedString = boldingUserName(userName: messageRenderingProtocol.getActivityName() ?? "", message: message, font: font)
+
             cell.font = font
             cell.messageLabel.lineBreakMode = .byCharWrapping
             cell.messageLabel.attributedText = attributedString
-            
+
             return cell
         }
         
-        func boldingUserName (userName: String, message: String, font: UIFont, index: Int) -> NSAttributedString {
+        func boldingUserName (userName: String, message: String, font: UIFont) -> NSAttributedString {
             // 텍스트의 라인 간격 조절 (예: 8포인트)
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 0
@@ -173,27 +172,39 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             ])
             
             // 특정 단어에 대한 스타일 적용
-            let fullString = data[index].getMessage() ?? ""
-            let range = (fullString as NSString).range(of: "사용자 이름")
+            let fullString = message ?? ""
+            let range = (fullString as NSString).range(of: userName)
             attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: 14.0), range: range)
             
             return attributedString
         }
         
-        func messageHandler (messageRenderingProtocol: MessageRenderingProtocol, cell: ChatMessageWithButtonCell) {
+        func cellHandler (messageRenderingProtocol: MessageRenderingProtocol, cell: ChatMessageWithButtonCell) {
+            // 메시지
+            let message = messageRenderingProtocol.getMessage() ?? ""
+            cell.font = font
+            cell.messageLabel.lineBreakMode = .byCharWrapping
+            cell.messageLabel.numberOfLines = 0
+            cell.messageLabel.translatesAutoresizingMaskIntoConstraints = false
+            
             switch messageRenderingProtocol.getMessageType() {
             case .normal :
                 if messageRenderingProtocol.getMessageStatus() == .deleted {
                 } else {
-                   
+                    let attributedString = boldingUserName(userName: messageRenderingProtocol.getActivityName() ?? "", message: message, font: font)
+                    cell.messageLabel.attributedText = attributedString
                 }
             case .welcom :
                 let socketResponseEvent = messageRenderingProtocol.getSocketResponseEvent()
                 if socketResponseEvent == .welcome {
 
                 } else if socketResponseEvent == .memberEntrance {
-                   
+                    let attributedString = boldingUserName(userName: messageRenderingProtocol.getActivityName() ?? "", message: message, font: font)
+                    cell.messageLabel.attributedText = attributedString
+                    cell.startBackgroundColor = "#60E58A".toUIColor()!
+                    cell.endBackgroundColor = "#60DDE5".toUIColor()!
                 }
+              return
             case .donate :
                 return
             case .pin :
@@ -201,6 +212,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             case .vote :
                 return
             case .system :
+                
                 return
             case .none :
                 return

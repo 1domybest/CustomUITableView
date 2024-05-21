@@ -79,6 +79,8 @@ class ChatMessageWithButtonCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        startBackgroundColor = .black.withAlphaComponent(0.5)
+        endBackgroundColor = .black.withAlphaComponent(0.5)
         circleButton.removeFromSuperview()
         errorBackgroundView.removeFromSuperview() // 이전에 추가된 뷰를 제거합니다.
         errorDeleteButton.removeFromSuperview()

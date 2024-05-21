@@ -123,3 +123,10 @@ enum MessageStatus {
     case failure
     case deleted
 }
+
+
+enum LiveStreamingRoleType:String {
+    case producer = "PRODUCER"
+    case manager = "MANAGER"
+    case idol = "IDOL"
+}

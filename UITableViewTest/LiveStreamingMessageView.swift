@@ -22,7 +22,6 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         tableView.register(ChatMessageWithButtonCell.self, forCellReuseIdentifier: "id")
         tableView.separatorStyle = .none
         
-        
         return tableView
     }
     
@@ -40,12 +39,14 @@ struct LiveStreamingMessageView: UIViewRepresentable {
     
     func makeCoordinator() -> Coordinator {
         print("Coordinator. 업데이트")
-        return Coordinator(data: data)
+        return Coordinator(data: data, parent: self)
     }
     
     class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         var data: [MessageRenderingProtocol]
+        
+        var parent: LiveStreamingMessageView
         
         let messageHorizantalPadding:CGFloat = 10
         let messageVerticalPadding:CGFloat = 10
@@ -57,8 +58,9 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         
         let font:UIFont = UIFont.systemFont(ofSize: 14.0) // 버튼 가로 패딩
         
-        init(data: [MessageRenderingProtocol]) {
+        init(data: [MessageRenderingProtocol], parent: LiveStreamingMessageView) {
             self.data = data
+            self.parent = parent
         }
         
         func updateData(_ newData: [MessageRenderingProtocol]) {
@@ -220,7 +222,10 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         func checkButtonMessage(messageRenderingProtocol: MessageRenderingProtocol) -> Bool {
             var result = false
             if messageRenderingProtocol.getSocketResponseEvent() == .memberEntrance {
-                result = true
+                if messageRenderingProtocol.getMessageStatus() != .success {
+                    result = true
+                }
+
             }
             return result
         }
@@ -236,16 +241,67 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         @objc func buttonTapped(_ sender: UIButton) {
             let row = sender.tag
             print("Button in cell \(row) tapped")
+            self.data[row].setMessageStatus(messageStatus: .success)
+            
+            var view: UIView? = sender
+            while view != nil && !(view is UITableView) {
+                view = view?.superview
+            }
+            
+            if let tableView = view as? UITableView {
+                tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
+            }
         }
         
         @objc func deleteTapped(_ sender: UIButton) {
             let row = sender.tag
             print("Button deleteTapped in cell \(row) tapped")
+
+            // 현재 뷰 계층에서 UITableView를 찾습니다.
+            var view: UIView? = sender
+            while view != nil && !(view is UITableView) {
+                view = view?.superview
+            }
+            
+            if let tableView = view as? UITableView {
+                guard let cell = sender.superview?.superview as? ChatMessageWithButtonCell else {
+                     print("Unable to find the cell containing the button.")
+                     return
+                 }
+                
+                guard let indexPath = tableView.indexPath(for: cell) else {
+                       print("Unable to find the index path of the cell.")
+                       return
+                   }
+                
+                // 데이터를 업데이트합니다.
+                var newData = self.data
+                newData.remove(at: row)
+                self.updateData(newData)
+                
+                // 데이터를 삭제한 후 테이블 뷰에서 해당 행을 삭제합니다.
+                
+                tableView.performBatchUpdates({
+                    tableView.deleteRows(at: [indexPath], with: .none)
+                }, completion: { _ in
+                    tableView.reloadData()
+                })
+                
+            }
         }
         
         @objc func resendTapped(_ sender: UIButton) {
             let row = sender.tag
             print("Button resendTapped in cell \(row) tapped")
+            
+            var view: UIView? = sender
+            while view != nil && !(view is UITableView) {
+                view = view?.superview
+            }
+            
+            if let tableView = view as? UITableView {
+                tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .fade)
+            }
         }
     }
 }

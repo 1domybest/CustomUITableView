@@ -89,6 +89,7 @@ class ChatMessageWithButtonCell: UITableViewCell {
     }
     
     func setup (messageRenderingProtocol: MessageRenderingProtocol, isButtonMessage: Bool, isErrorMessage: Bool) {
+        print("setUP 호출")
         self.isButtonMessage = isButtonMessage
         self.isErrorMessage = isErrorMessage
         self.messageRenderingProtocol = messageRenderingProtocol
@@ -190,7 +191,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         // 텍스트 가로 길이
         let textWidth = messageLabel.text?.widthOfString(usingFont: font) ?? .zero
         // 텍스트 1줄당 세로 길이

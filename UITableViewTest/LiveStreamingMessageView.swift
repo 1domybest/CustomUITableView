@@ -110,11 +110,14 @@ struct LiveStreamingMessageView: UIViewRepresentable {
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let messageRenderingProtocol = data[indexPath.row]
             // 공통
+            let messageRenderingProtocol = data[indexPath.row]
+            
+            let isButtonMessage:Bool = checkButtonMessage(messageRenderingProtocol: messageRenderingProtocol)
+            let isErrorMessage:Bool = checkErrorMessage(messageRenderingProtocol: messageRenderingProtocol)
             // 재사용
             let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! ChatMessageWithButtonCell
-            cell.messageRenderingProtocol = messageRenderingProtocol
+            cell.setup(messageRenderingProtocol: messageRenderingProtocol, isButtonMessage: isButtonMessage, isErrorMessage: isErrorMessage)
             // 테이블 클릭시 UI 변경 막기
             cell.selectedBackgroundView = UIView()
             
@@ -127,19 +130,25 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             
             // 버튼 메시지용 ------
             // 버튼이 있는 메시지일시 버튼 등록
-            cell.circleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-            // 어떤 인덱스인지 알수있도록 등록
-            cell.circleButton.tag = indexPath.row
+            if isButtonMessage {
+                cell.circleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+                // 어떤 인덱스인지 알수있도록 등록
+                cell.circleButton.tag = indexPath.row
+            }
+            
             
             
             //  에러일시 ------ [기본메시지일때만]
-            cell.errorDeleteButton.addTarget(self, action: #selector(deleteTapped(_:)), for: .touchUpInside)
-            // 어떤 인덱스인지 알수있도록 등록
-            cell.errorDeleteButton.tag = indexPath.row
+            if isErrorMessage {
+                cell.errorDeleteButton.addTarget(self, action: #selector(deleteTapped(_:)), for: .touchUpInside)
+                // 어떤 인덱스인지 알수있도록 등록
+                cell.errorDeleteButton.tag = indexPath.row
+                
+                cell.errorResendButton.addTarget(self, action: #selector(resendTapped(_:)), for: .touchUpInside)
+                // 어떤 인덱스인지 알수있도록 등록
+                cell.errorResendButton.tag = indexPath.row
+            }
             
-            cell.errorResendButton.addTarget(self, action: #selector(resendTapped(_:)), for: .touchUpInside)
-            // 어떤 인덱스인지 알수있도록 등록
-            cell.errorResendButton.tag = indexPath.row
             
             
             let attributedString = boldingUserName(userName: "사용자이름", message: message, font: font, index: indexPath.row)
@@ -203,7 +212,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             if messageRenderingProtocol.getSocketResponseEvent() == .memberEntrance {
                 result = true
             }
-            return true
+            return result
         }
         
         func checkErrorMessage(messageRenderingProtocol: MessageRenderingProtocol) -> Bool {
@@ -211,7 +220,7 @@ struct LiveStreamingMessageView: UIViewRepresentable {
             if messageRenderingProtocol.getMessageStatus() == .failure {
                 result = true
             }
-            return true
+            return result
         }
         
         @objc func buttonTapped(_ sender: UIButton) {

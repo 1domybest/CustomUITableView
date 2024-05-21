@@ -42,34 +42,34 @@ class ContentViewModel: ObservableObject {
     
     
     init() {
-        let mg = "아무거나 막적음. ㅁㄴㅇㅁ"
+        let mg = "아무거나 막적음. ㅁㄴㅇㅁㅁㄴㅇㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴ ㅇㅁㄴㅇㅁㄴㅇㅁㄴ"
         for i in 0...1000 {
-            let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 메시지 \(i % 2 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
+//            let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 메시지 \(i % 2 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
+//            
+//            let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
+//            
+//            self.messageList.append(messageRenderingProtocol)
             
-            let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
-            
-            self.messageList.append(messageRenderingProtocol)
-            
-//            if i % 3 == 0 {
-//                let preMessage = MemberEntraceResponse(userId: 1, message: "사용자 이름님이 입장하셨습니다")
-//                var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
-//                self.messageList.append(messageRenderingProtocol)
-//            } else if i % 2 == 0 {
-//                let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 에러 메시지 임 \(i % 4 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
-//                
-//                var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
-//                
-//                messageRenderingProtocol.setMessageStatus(messageStatus: .failure)
-//                
-//                self.messageList.append(messageRenderingProtocol)
-//                
-//            } else {
-//                let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 메시지 \(i % 2 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
-//                
-//                let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
-//                
-//                self.messageList.append(messageRenderingProtocol)
-//            }
+            if i % 3 == 0 {
+                let preMessage = MemberEntraceResponse(userId: 1, message: "사용자 이름님이 입장하셨습니다")
+                var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
+                self.messageList.append(messageRenderingProtocol)
+            } else if i % 2 == 0 {
+                let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 에러 메시지 임 \(i % 4 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
+                
+                var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
+                
+                messageRenderingProtocol.setMessageStatus(messageStatus: .failure)
+                
+                self.messageList.append(messageRenderingProtocol)
+                
+            } else {
+                let preMessage = UserMsgResponse(message: "사용자 이름 \(i) 번째 메시지 \(i % 2 == 0 ? "\(mg)" + "\(mg)" + "\(mg)" : mg)", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(i)", userProfileImgUrl: "" )
+                
+                let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
+                
+                self.messageList.append(messageRenderingProtocol)
+            }
            
         }
         
@@ -79,7 +79,8 @@ class ContentViewModel: ObservableObject {
     func appendMeesage () {
         let preMessage = UserMsgResponse(message: "\(self.messageList.count) 번째 메시지", messageId: "", userId: 1, userType: "", messageChanged: false, userPid: "", userName: "\(self.messageList.count)", userProfileImgUrl: "" )
         
-        let messageRenderingProtocol: any MessageRenderingProtocol = preMessage
+        var messageRenderingProtocol: any MessageRenderingProtocol = preMessage
+        messageRenderingProtocol.setMessageStatus(messageStatus: .success)
         
         self.messageList.append(messageRenderingProtocol)
     }

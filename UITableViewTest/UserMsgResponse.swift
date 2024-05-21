@@ -10,6 +10,7 @@ import SwiftUI
 
 struct UserMsgResponse: Decodable, MessageRenderingProtocol {
     var messageStatus: MessageStatus = .waiting
+    
     func getSocketResponseEvent() -> SocketResponseEvent {
         return .userMsg
     }

@@ -42,6 +42,9 @@ class ChatMessageWithButtonCell: UITableViewCell {
     var endBackgroundColor: UIColor = .black.withAlphaComponent(0.5)
     var circleButtonImage: UIImage = UIImage(resource: .iconXmark)
         
+    var isButtonMessage:Bool = false
+    var isErrorMessage:Bool = false
+    
     let circleButton: UIButton = {
           let button = UIButton()
           button.translatesAutoresizingMaskIntoConstraints = false
@@ -72,12 +75,22 @@ class ChatMessageWithButtonCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        let isButtonMessage: Bool = checkButtonMessage()
-        let isErrorMessage: Bool = checkErrorMessage()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        circleButton.removeFromSuperview()
+        errorBackgroundView.removeFromSuperview() // 이전에 추가된 뷰를 제거합니다.
+        errorDeleteButton.removeFromSuperview()
+        errorResendButton.removeFromSuperview()
+    }
+    
+    func setup (messageRenderingProtocol: MessageRenderingProtocol, isButtonMessage: Bool, isErrorMessage: Bool) {
+        self.isButtonMessage = isButtonMessage
+        self.isErrorMessage = isErrorMessage
+        self.messageRenderingProtocol = messageRenderingProtocol
         
         messageBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        errorBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         
         self.backgroundColor = .white
         
@@ -85,13 +98,46 @@ class ChatMessageWithButtonCell: UITableViewCell {
         addSubview(messageLabel)
         
         if isErrorMessage {
-            addSubview(errorBackgroundView)
+            errorBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+            
+            contentView.addSubview(errorBackgroundView)
             contentView.addSubview(errorDeleteButton)
             contentView.addSubview(errorResendButton)
+            
+            errorDeleteButton.translatesAutoresizingMaskIntoConstraints = false
+            errorResendButton.translatesAutoresizingMaskIntoConstraints = false
+            
+            let constraints = [
+                errorBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+                errorBackgroundView.topAnchor.constraint(equalTo: bottomAnchor, constant: -32),
+                errorBackgroundView.leadingAnchor.constraint(equalTo: messageBackgroundView.leadingAnchor),
+                errorBackgroundView.trailingAnchor.constraint(equalTo: messageBackgroundView.leadingAnchor, constant: 68),
+                
+                errorDeleteButton.leadingAnchor.constraint(equalTo: errorBackgroundView.leadingAnchor, constant: 7),
+                errorDeleteButton.trailingAnchor.constraint(equalTo: errorBackgroundView.leadingAnchor, constant: 27),
+                errorDeleteButton.bottomAnchor.constraint(equalTo: errorBackgroundView.topAnchor, constant: 24),
+                errorDeleteButton.topAnchor.constraint(equalTo: errorBackgroundView.topAnchor, constant: 4),
+                
+                errorResendButton.leadingAnchor.constraint(equalTo: errorBackgroundView.trailingAnchor, constant: -27),
+                errorResendButton.trailingAnchor.constraint(equalTo: errorBackgroundView.trailingAnchor, constant: -7),
+                errorResendButton.bottomAnchor.constraint(equalTo: errorBackgroundView.topAnchor, constant: 24),
+                errorResendButton.topAnchor.constraint(equalTo: errorBackgroundView.topAnchor, constant: 4),
+            ]
+            
+            // 제약 조건을 활성화
+            NSLayoutConstraint.activate(constraints)
         }
         
         if isButtonMessage {
             contentView.addSubview(circleButton)
+            circleButton.translatesAutoresizingMaskIntoConstraints = false
+            let constraints = [
+                circleButton.leadingAnchor.constraint(equalTo: messageBackgroundView.leadingAnchor, constant: 10), // 오른쪽 여백 10
+                circleButton.centerYAnchor.constraint(equalTo: messageBackgroundView.centerYAnchor) // messageBackgroundView의 센터에 위치
+            ]
+            
+            // 제약 조건을 활성화
+            NSLayoutConstraint.activate(constraints)
         }
         
         
@@ -103,7 +149,7 @@ class ChatMessageWithButtonCell: UITableViewCell {
         
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        var constraints = [
+        let constraints = [
             // 메시지 백그라운드 컬러 오토사이징
             messageBackgroundView.topAnchor.constraint(equalTo: topAnchor, constant: messageVerticalPadding),
             messageBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: messageHorizantalPadding),
@@ -117,21 +163,15 @@ class ChatMessageWithButtonCell: UITableViewCell {
             messageLabel.trailingAnchor.constraint(equalTo: messageBackgroundView.trailingAnchor, constant: textHorizantalPadding),
         ]
         
-        if isErrorMessage {
-            let errorConstraints = [
-                errorBackgroundView.topAnchor.constraint(equalTo: topAnchor, constant: messageVerticalPadding),
-                errorBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: messageHorizantalPadding),
-                errorBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: messageVerticalPadding),
-                errorBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: messageHorizantalPadding),
-            ]
-            // 기존 constraints 배열에 새로운 제약 조건 추가
-            constraints.append(contentsOf: errorConstraints)
-        }
-        
         NSLayoutConstraint.activate(constraints)
         
         contentView.isUserInteractionEnabled = true
+        
+        setNeedsLayout()
+        layoutIfNeeded()
+
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -139,9 +179,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        let isButtonMessage: Bool = checkButtonMessage()
-        let isErrorMessage: Bool = checkErrorMessage()
         
         // 텍스트 가로 길이
         let textWidth = messageLabel.text?.widthOfString(usingFont: font) ?? .zero
@@ -184,7 +221,7 @@ class ChatMessageWithButtonCell: UITableViewCell {
         if messageRenderingProtocol?.getSocketResponseEvent() == .memberEntrance {
             result = true
         }
-        return true
+        return result
     }
     
     func checkErrorMessage() -> Bool {
@@ -192,7 +229,7 @@ class ChatMessageWithButtonCell: UITableViewCell {
         if messageRenderingProtocol?.getMessageStatus() == .failure {
             result = true
         }
-        return true
+        return result
     }
     
     func layoutMainText(finalTextWidth: CGFloat, finalTextHeight: CGFloat) {
@@ -227,7 +264,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
     private func layoutButton() {
         let bubbleWidth = messageBackgroundView.frame.width
         let bubbleHeight = messageBackgroundView.frame.height
-        
         // 버튼의 위치 계산
         circleButton.frame.origin.x = messageBackgroundView.frame.origin.x + bubbleWidth + circleHorizantalPadding
         circleButton.frame.origin.y = messageBackgroundView.frame.origin.y + (bubbleHeight - circleSize) / 2
@@ -235,20 +271,6 @@ class ChatMessageWithButtonCell: UITableViewCell {
      }
     
     func layoutErrorView (textLineHeight: CGFloat) {
-        // errorBackgroundView의 크기 조정
-        errorBackgroundView.frame.size.width = 68
-        errorBackgroundView.frame.size.height = textLineHeight + textVerticalPadding * 2
-        
-        // errorBackgroundView의 위치를 bubbleBackgroundView 아래 4픽셀에 배치
-        errorBackgroundView.frame.origin.x = messageBackgroundView.frame.origin.x
-        errorBackgroundView.frame.origin.y = messageBackgroundView.frame.maxY + errorVerticalPadding
-        
-        errorResendButton.frame.origin.x = errorBackgroundView.frame.origin.x + errorHorizantalPadding
-        errorResendButton.frame.origin.y = errorBackgroundView.frame.origin.y + errorVerticalPadding
-        
-        errorDeleteButton.frame.origin.x = errorBackgroundView.frame.maxX - (errorImageSize + errorHorizantalPadding) // errorDeleteButton의 오른쪽에 위치
-        errorDeleteButton.frame.origin.y = errorBackgroundView.frame.origin.y + errorVerticalPadding
-        
         let linePath = UIBezierPath()
         linePath.move(to: CGPoint(x: errorBackgroundView.bounds.midX, y: 0))
         linePath.addLine(to: CGPoint(x: errorBackgroundView.bounds.midX, y: errorBackgroundView.bounds.height))

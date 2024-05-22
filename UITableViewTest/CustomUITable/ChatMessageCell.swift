@@ -89,7 +89,6 @@ class ChatMessageCell: UITableViewCell {
     }
     
     func setup (messageRenderingProtocol: MessageRenderingProtocol, isButtonMessage: Bool, isErrorMessage: Bool) {
-        print("setUP 호출")
         self.isButtonMessage = isButtonMessage
         self.isErrorMessage = isErrorMessage
         self.messageRenderingProtocol = messageRenderingProtocol

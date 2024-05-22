@@ -28,7 +28,7 @@ struct ContentView: View {
             
             Spacer().frame(height: 50)
             
-            NewCustomTableViewRepresentable(view: vm.newCustomTableView)
+            CustomUITableViewRepresentable(view: vm.newCustomTableView)
                 .frame(height: UIScreen.main.bounds.height/3)
             
 //            CustomUITableView(
@@ -53,7 +53,7 @@ struct ContentView: View {
 
 class ContentViewModel: ObservableObject {
     var messageList: [any MessageRenderingProtocol] = [] // 메시지 리스트
-    var newCustomTableView:NewCustomTableView?
+    var newCustomTableView:CustomUITableView?
     
     init() {
         let mg = "아무거나 막적음. ㅁㄴㅇㅁㅁㄴㅇㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴ ㅇㅁㄴㅇㅁㄴㅇㅁㄴ"
@@ -85,7 +85,7 @@ class ContentViewModel: ObservableObject {
            
         }
        
-        self.newCustomTableView = NewCustomTableView(
+        self.newCustomTableView = CustomUITableView(
                 data: self.messageList,
                 onClickDelete: onClickDelete,
                 onClickResend: onClickResend,
@@ -121,7 +121,6 @@ class ContentViewModel: ObservableObject {
         
         self.newCustomTableView?.appendData(messageRenderingProtocol)
         self.newCustomTableView?.scrollToBottom()
-        
         
     }
 }

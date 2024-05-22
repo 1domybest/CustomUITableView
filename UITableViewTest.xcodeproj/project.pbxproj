@@ -11,12 +11,12 @@
 		D14C481B2BF7425300AF7BEA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14C481A2BF7425300AF7BEA /* String.swift */; };
 		D17F59572BFB107A001AFF16 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17F59562BFB107A001AFF16 /* ChatMessageCell.swift */; };
 		D17F59912BFC452C001AFF16 /* MemberEntranceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17F59902BFC452C001AFF16 /* MemberEntranceResponse.swift */; };
-		D17F59942BFCA8E5001AFF16 /* NewCustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17F59932BFCA8E5001AFF16 /* NewCustomTableView.swift */; };
+		D17F59942BFCA8E5001AFF16 /* CustomUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17F59932BFCA8E5001AFF16 /* CustomUITableView.swift */; };
 		D1EFD0652BF5FC96008DE166 /* UITableViewTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0642BF5FC96008DE166 /* UITableViewTestApp.swift */; };
 		D1EFD0672BF5FC96008DE166 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0662BF5FC96008DE166 /* ContentView.swift */; };
 		D1EFD0692BF5FC97008DE166 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1EFD0682BF5FC97008DE166 /* Assets.xcassets */; };
 		D1EFD06C2BF5FC97008DE166 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1EFD06B2BF5FC97008DE166 /* Preview Assets.xcassets */; };
-		D1EFD0732BF5FD02008DE166 /* CustomUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0722BF5FD02008DE166 /* CustomUITableView.swift */; };
+		D1EFD0732BF5FD02008DE166 /* CustomUITableView1.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0722BF5FD02008DE166 /* CustomUITableView1.swift */; };
 		D1EFD0812BF6ECDE008DE166 /* MessageRenderingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0802BF6ECDE008DE166 /* MessageRenderingProtocol.swift */; };
 		D1EFD0832BF6EE45008DE166 /* UserMsgResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0822BF6EE45008DE166 /* UserMsgResponse.swift */; };
 		D1EFD0852BF6FC64008DE166 /* TempChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EFD0842BF6FC64008DE166 /* TempChatMessageCell.swift */; };
@@ -27,13 +27,13 @@
 		D14C481A2BF7425300AF7BEA /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D17F59562BFB107A001AFF16 /* ChatMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
 		D17F59902BFC452C001AFF16 /* MemberEntranceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberEntranceResponse.swift; sourceTree = "<group>"; };
-		D17F59932BFCA8E5001AFF16 /* NewCustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCustomTableView.swift; sourceTree = "<group>"; };
+		D17F59932BFCA8E5001AFF16 /* CustomUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUITableView.swift; sourceTree = "<group>"; };
 		D1EFD0612BF5FC96008DE166 /* UITableViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UITableViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1EFD0642BF5FC96008DE166 /* UITableViewTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewTestApp.swift; sourceTree = "<group>"; };
 		D1EFD0662BF5FC96008DE166 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D1EFD0682BF5FC97008DE166 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D1EFD06B2BF5FC97008DE166 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		D1EFD0722BF5FD02008DE166 /* CustomUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUITableView.swift; sourceTree = "<group>"; };
+		D1EFD0722BF5FD02008DE166 /* CustomUITableView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUITableView1.swift; sourceTree = "<group>"; };
 		D1EFD0802BF6ECDE008DE166 /* MessageRenderingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRenderingProtocol.swift; sourceTree = "<group>"; };
 		D1EFD0822BF6EE45008DE166 /* UserMsgResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMsgResponse.swift; sourceTree = "<group>"; };
 		D1EFD0842BF6FC64008DE166 /* TempChatMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempChatMessageCell.swift; sourceTree = "<group>"; };
@@ -53,9 +53,8 @@
 		D17F59922BFCA2C2001AFF16 /* CustomUITable */ = {
 			isa = PBXGroup;
 			children = (
-				D1EFD0722BF5FD02008DE166 /* CustomUITableView.swift */,
 				D17F59562BFB107A001AFF16 /* ChatMessageCell.swift */,
-				D17F59932BFCA8E5001AFF16 /* NewCustomTableView.swift */,
+				D17F59932BFCA8E5001AFF16 /* CustomUITableView.swift */,
 			);
 			path = CustomUITable;
 			sourceTree = "<group>";
@@ -79,6 +78,7 @@
 		D1EFD0632BF5FC96008DE166 /* UITableViewTest */ = {
 			isa = PBXGroup;
 			children = (
+				D1EFD0722BF5FD02008DE166 /* CustomUITableView1.swift */,
 				D17F59922BFCA2C2001AFF16 /* CustomUITable */,
 				D1EFD0822BF6EE45008DE166 /* UserMsgResponse.swift */,
 				D1EFD0642BF5FC96008DE166 /* UITableViewTestApp.swift */,
@@ -175,10 +175,10 @@
 			files = (
 				D1EFD0672BF5FC96008DE166 /* ContentView.swift in Sources */,
 				D1EFD0832BF6EE45008DE166 /* UserMsgResponse.swift in Sources */,
-				D1EFD0732BF5FD02008DE166 /* CustomUITableView.swift in Sources */,
+				D1EFD0732BF5FD02008DE166 /* CustomUITableView1.swift in Sources */,
 				D1EFD0852BF6FC64008DE166 /* TempChatMessageCell.swift in Sources */,
 				D14C481B2BF7425300AF7BEA /* String.swift in Sources */,
-				D17F59942BFCA8E5001AFF16 /* NewCustomTableView.swift in Sources */,
+				D17F59942BFCA8E5001AFF16 /* CustomUITableView.swift in Sources */,
 				D1EFD0812BF6ECDE008DE166 /* MessageRenderingProtocol.swift in Sources */,
 				D1EFD0652BF5FC96008DE166 /* UITableViewTestApp.swift in Sources */,
 				D17F59912BFC452C001AFF16 /* MemberEntranceResponse.swift in Sources */,
